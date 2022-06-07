@@ -1,0 +1,6 @@
+D:\A工作\软件代码\赛达项目\TAIAMESControlServer20220418\TAIAMESControlServer测试版\TAIAMESControlServer\obj\Release\TAIAMESControlServer.csproj.AssemblyReference.cache
+D:\A工作\软件代码\赛达项目\TAIAMESControlServer20220418\TAIAMESControlServer测试版\TAIAMESControlServer\obj\Release\TAIAMESControlServer.csproj.SuggestedBindingRedirects.cache
+D:\A工作\软件代码\赛达项目\TAIAMESControlServer20220418\TAIAMESControlServer测试版\TAIAMESControlServer\obj\Release\TAIAMESControlServer.FormMain.resources
+D:\A工作\软件代码\赛达项目\TAIAMESControlServer20220418\TAIAMESControlServer测试版\TAIAMESControlServer\obj\Release\TAIAMESControlServer.Properties.Resources.resources
+D:\A工作\软件代码\赛达项目\TAIAMESControlServer20220418\TAIAMESControlServer测试版\TAIAMESControlServer\obj\Release\TAIAMESControlServer.csproj.GenerateResource.cache
+D:\A工作\软件代码\赛达项目\TAIAMESControlServer20220418\TAIAMESControlServer测试版\TAIAMESControlServer\obj\Release\TAIAMESControlServer.csproj.CoreCompileInputs.cache

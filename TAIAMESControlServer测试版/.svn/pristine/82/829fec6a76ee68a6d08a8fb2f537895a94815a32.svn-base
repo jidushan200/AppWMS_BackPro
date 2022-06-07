@@ -1,0 +1,195 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Data;
+using System.Data.SqlClient;
+using CommonClass;
+using NAudio.Wave;
+
+namespace TAIAMESControlServer
+{
+    public class AlarmAudioControl
+    {
+        static log4net.ILog log = log4net.LogManager.GetLogger("AlarmAudioControl");
+        static FormMain formmain = (FormMain)MyApplicationContext.CurrentContext.MainForm;
+
+        //线程控制变量
+        public static bool bStop = false;                                                           //线程停止信号
+        public static bool bRunningFlag = false;                                                    //线程运行标志
+
+        static void thTaskAlarmAudioFunc()
+        {
+            string strmsg = "";
+            int iTimeWait = 0;
+
+            WaveOutEvent waveDevice = new WaveOutEvent();                                           //播放设备
+            LoopStream loopAudioFileStream = null;                                                  //循环播放音乐文件流
+            AudioFileReader audioFileStream = null;                                                 //音乐文件流
+            int Old_iMusicID = 0;                                                                   //保存上次音乐ID
+            int iMusicID = 0;                                                                       //本次音乐ID
+
+            strmsg = "AlarmAudioControl线程启动";
+            formmain.logToView(strmsg);
+            log.Info(strmsg);
+
+            iTimeWait = 0;
+            bRunningFlag = true;                                                                    //设置AlarmAudioControl线程停止标志
+            while (true)
+            {
+                if (bStop)                                                                          //结束线程
+                    break;
+
+                //延时等待
+                if (iTimeWait > 0)
+                {
+                    iTimeWait--;
+                    Thread.Sleep(1000);
+                    continue;
+                }
+
+                using (SqlConnection conn = new SqlConnection(Properties.Settings.Default.ConnString))
+                {
+                    try
+                    {
+                        conn.Open();
+
+                        while (true)
+                        {
+                            if (bStop)                                                              //结束线程
+                                break;
+
+                            //延时等待
+                            if (iTimeWait > 0)
+                            {
+                                iTimeWait--;
+                                Thread.Sleep(1000);
+                                continue;
+                            }
+
+                            DataSet ds = SQLHelper.QueryDataSet(conn, null, CommandType.StoredProcedure, "adn_alarmaudio_sel", null);
+                            if (ds.Tables[0].Rows.Count > 0)
+                            {
+                                //播放音乐
+                                iMusicID = (int)ds.Tables[0].Rows[0]["musicid"];
+                                if (iMusicID != Old_iMusicID)
+                                {
+                                    if (Old_iMusicID != 0)
+                                    {
+                                        if (loopAudioFileStream != null)
+                                        {
+                                            waveDevice.Stop();
+                                            loopAudioFileStream.Dispose();
+                                            loopAudioFileStream = null;
+                                            audioFileStream.Close();
+                                            audioFileStream.Dispose();
+                                            audioFileStream = null;
+                                        }
+                                    }
+                                    bool b = true;
+                                    string strMusicFilename = AppDomain.CurrentDomain.BaseDirectory + "Audio\\" + iMusicID.ToString();
+                                    if(System.IO.File.Exists(strMusicFilename + ".wav"))
+                                    {
+                                        strMusicFilename += ".wav";
+                                    }
+                                    else if (System.IO.File.Exists(strMusicFilename + ".mp3"))
+                                    {
+                                        strMusicFilename += ".mp3";
+                                    }
+                                    else
+                                    {
+                                        b = false;
+                                    }
+                                    if (b)
+                                    {
+                                        audioFileStream = new AudioFileReader(strMusicFilename);
+                                        loopAudioFileStream = new LoopStream(audioFileStream);
+                                        waveDevice.Init(loopAudioFileStream);
+                                        waveDevice.Play();
+
+                                        strmsg = "音乐播放开始，音乐ID：" + iMusicID.ToString();
+                                        formmain.logToView(strmsg);
+                                        log.Info(strmsg);
+                                    }
+                                    else
+                                    {
+                                        strmsg = "音乐文件不存在，音乐ID：" + iMusicID.ToString();
+                                        formmain.logToView(strmsg);
+                                        log.Info(strmsg);
+                                    }
+                                    Old_iMusicID = iMusicID;
+                                }
+                            }
+                            else
+                            {
+                                if (Old_iMusicID != 0)
+                                {
+                                    //关闭音乐
+                                    if (loopAudioFileStream != null)
+                                    {
+                                        waveDevice.Stop();
+                                        loopAudioFileStream.Dispose();
+                                        loopAudioFileStream = null;
+                                        audioFileStream.Close();
+                                        audioFileStream.Dispose();
+                                        audioFileStream = null;
+                                    }
+                                    Old_iMusicID = 0;
+
+                                    strmsg = "音乐播放已关闭";
+                                    formmain.logToView(strmsg);
+                                    log.Info(strmsg);
+                                }
+                            }
+
+                            Thread.Sleep(200);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        strmsg = "Error: " + ex.Message + " 等待一会儿再试!";
+                        formmain.logToView(strmsg);
+                        log.Info(strmsg);
+                        iTimeWait = 10;
+                        continue;
+                    }
+                }
+            }
+
+            //关闭音乐播放
+            if (Old_iMusicID != 0)
+            {
+                if (loopAudioFileStream != null)
+                {
+                    waveDevice.Stop();
+                    loopAudioFileStream.Dispose();
+                    loopAudioFileStream = null;
+                    audioFileStream.Close();
+                    audioFileStream.Dispose();
+                    audioFileStream = null;
+                }
+            }
+            waveDevice.Dispose();
+
+            strmsg = "AlarmAudioControl线程停止";
+            formmain.logToView(strmsg);
+            log.Info(strmsg);
+            bRunningFlag = false;                                                                   //设置AlarmAudioControl线程停止标志
+            return;
+        }
+
+        public static void Start()
+        {
+            //启动AlarmAudioControl线程
+            Task.Run(() => thTaskAlarmAudioFunc());
+        }
+
+        public static void Stop()
+        {
+            //停止AlarmAudioControl线程
+            bStop = true;
+        }
+    }
+}

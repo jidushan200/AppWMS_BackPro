@@ -1,0 +1,479 @@
+﻿namespace TAIAMESControlServer
+{
+    partial class FormMain
+    {
+        /// <summary>
+        /// 必需的设计器变量。
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// 清理所有正在使用的资源。
+        /// </summary>
+        /// <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows 窗体设计器生成的代码
+
+        /// <summary>
+        /// 设计器支持所需的方法 - 不要修改
+        /// 使用代码编辑器修改此方法的内容。
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.skinEngine1 = new Sunisoft.IrisSkin.SkinEngine(((System.ComponentModel.Component)(this)));
+            this.btnStart = new System.Windows.Forms.Button();
+            this.btnStop = new System.Windows.Forms.Button();
+            this.dgBelt = new System.Windows.Forms.DataGridView();
+            this.dgBeltColName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgBeltColValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgBeltColOptime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgCnc = new System.Windows.Forms.DataGridView();
+            this.dgCncColName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgCncColValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgCncColOptime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgWms = new System.Windows.Forms.DataGridView();
+            this.dgWmsColName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgWmsColValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgWmsColOptime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgAgv = new System.Windows.Forms.DataGridView();
+            this.dgAgvColName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgAgvColValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgAgvColOptime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.panelButton = new System.Windows.Forms.Panel();
+            this.panelAGV = new System.Windows.Forms.Panel();
+            this.lbAGVTitle = new System.Windows.Forms.Label();
+            this.panelCNC = new System.Windows.Forms.Panel();
+            this.lbCNCTitle = new System.Windows.Forms.Label();
+            this.panelBELT = new System.Windows.Forms.Panel();
+            this.lbBELTTitle = new System.Windows.Forms.Label();
+            this.panelWMS = new System.Windows.Forms.Panel();
+            this.lbWMSTitle = new System.Windows.Forms.Label();
+            this.tbLog = new System.Windows.Forms.TextBox();
+            ((System.ComponentModel.ISupportInitialize)(this.dgBelt)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgCnc)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgWms)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgAgv)).BeginInit();
+            this.panelButton.SuspendLayout();
+            this.panelAGV.SuspendLayout();
+            this.panelCNC.SuspendLayout();
+            this.panelBELT.SuspendLayout();
+            this.panelWMS.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // skinEngine1
+            // 
+            this.skinEngine1.SerialNumber = "";
+            this.skinEngine1.SkinFile = null;
+            // 
+            // btnStart
+            // 
+            this.btnStart.Location = new System.Drawing.Point(3, 3);
+            this.btnStart.Name = "btnStart";
+            this.btnStart.Size = new System.Drawing.Size(75, 75);
+            this.btnStart.TabIndex = 0;
+            this.btnStart.Text = "启动";
+            this.btnStart.UseVisualStyleBackColor = true;
+            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
+            // 
+            // btnStop
+            // 
+            this.btnStop.Location = new System.Drawing.Point(84, 3);
+            this.btnStop.Name = "btnStop";
+            this.btnStop.Size = new System.Drawing.Size(75, 75);
+            this.btnStop.TabIndex = 1;
+            this.btnStop.Text = "停止";
+            this.btnStop.UseVisualStyleBackColor = true;
+            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
+            // 
+            // dgBelt
+            // 
+            this.dgBelt.AllowUserToAddRows = false;
+            this.dgBelt.AllowUserToDeleteRows = false;
+            this.dgBelt.AllowUserToResizeRows = false;
+            this.dgBelt.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.dgBelt.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgBelt.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgBeltColName,
+            this.dgBeltColValue,
+            this.dgBeltColOptime});
+            this.dgBelt.Location = new System.Drawing.Point(17, 34);
+            this.dgBelt.MultiSelect = false;
+            this.dgBelt.Name = "dgBelt";
+            this.dgBelt.ReadOnly = true;
+            this.dgBelt.RowHeadersVisible = false;
+            this.dgBelt.Size = new System.Drawing.Size(357, 201);
+            this.dgBelt.TabIndex = 7;
+            // 
+            // dgBeltColName
+            // 
+            this.dgBeltColName.DataPropertyName = "name";
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("宋体", 9F);
+            this.dgBeltColName.DefaultCellStyle = dataGridViewCellStyle1;
+            this.dgBeltColName.HeaderText = "变量名";
+            this.dgBeltColName.Name = "dgBeltColName";
+            this.dgBeltColName.ReadOnly = true;
+            this.dgBeltColName.Width = 120;
+            // 
+            // dgBeltColValue
+            // 
+            this.dgBeltColValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dgBeltColValue.DataPropertyName = "value";
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dgBeltColValue.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dgBeltColValue.HeaderText = "变量值";
+            this.dgBeltColValue.Name = "dgBeltColValue";
+            this.dgBeltColValue.ReadOnly = true;
+            // 
+            // dgBeltColOptime
+            // 
+            this.dgBeltColOptime.DataPropertyName = "optime";
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dgBeltColOptime.DefaultCellStyle = dataGridViewCellStyle3;
+            this.dgBeltColOptime.HeaderText = "操作时间";
+            this.dgBeltColOptime.Name = "dgBeltColOptime";
+            this.dgBeltColOptime.ReadOnly = true;
+            this.dgBeltColOptime.Width = 140;
+            // 
+            // dgCnc
+            // 
+            this.dgCnc.AllowUserToAddRows = false;
+            this.dgCnc.AllowUserToDeleteRows = false;
+            this.dgCnc.AllowUserToResizeRows = false;
+            this.dgCnc.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.dgCnc.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgCnc.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgCncColName,
+            this.dgCncColValue,
+            this.dgCncColOptime});
+            this.dgCnc.Location = new System.Drawing.Point(15, 66);
+            this.dgCnc.MultiSelect = false;
+            this.dgCnc.Name = "dgCnc";
+            this.dgCnc.ReadOnly = true;
+            this.dgCnc.RowHeadersVisible = false;
+            this.dgCnc.Size = new System.Drawing.Size(359, 129);
+            this.dgCnc.TabIndex = 6;
+            // 
+            // dgCncColName
+            // 
+            this.dgCncColName.DataPropertyName = "name";
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("宋体", 9F);
+            this.dgCncColName.DefaultCellStyle = dataGridViewCellStyle4;
+            this.dgCncColName.HeaderText = "变量名";
+            this.dgCncColName.Name = "dgCncColName";
+            this.dgCncColName.ReadOnly = true;
+            this.dgCncColName.Width = 120;
+            // 
+            // dgCncColValue
+            // 
+            this.dgCncColValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dgCncColValue.DataPropertyName = "value";
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dgCncColValue.DefaultCellStyle = dataGridViewCellStyle5;
+            this.dgCncColValue.HeaderText = "变量值";
+            this.dgCncColValue.Name = "dgCncColValue";
+            this.dgCncColValue.ReadOnly = true;
+            // 
+            // dgCncColOptime
+            // 
+            this.dgCncColOptime.DataPropertyName = "optime";
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dgCncColOptime.DefaultCellStyle = dataGridViewCellStyle6;
+            this.dgCncColOptime.HeaderText = "操作时间";
+            this.dgCncColOptime.Name = "dgCncColOptime";
+            this.dgCncColOptime.ReadOnly = true;
+            this.dgCncColOptime.Width = 140;
+            // 
+            // dgWms
+            // 
+            this.dgWms.AllowUserToAddRows = false;
+            this.dgWms.AllowUserToDeleteRows = false;
+            this.dgWms.AllowUserToResizeRows = false;
+            this.dgWms.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.dgWms.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgWms.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgWmsColName,
+            this.dgWmsColValue,
+            this.dgWmsColOptime});
+            this.dgWms.Location = new System.Drawing.Point(54, 55);
+            this.dgWms.MultiSelect = false;
+            this.dgWms.Name = "dgWms";
+            this.dgWms.ReadOnly = true;
+            this.dgWms.RowHeadersVisible = false;
+            this.dgWms.Size = new System.Drawing.Size(385, 180);
+            this.dgWms.TabIndex = 3;
+            // 
+            // dgWmsColName
+            // 
+            this.dgWmsColName.DataPropertyName = "name";
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dgWmsColName.DefaultCellStyle = dataGridViewCellStyle7;
+            this.dgWmsColName.HeaderText = "变量名";
+            this.dgWmsColName.Name = "dgWmsColName";
+            this.dgWmsColName.ReadOnly = true;
+            this.dgWmsColName.Width = 120;
+            // 
+            // dgWmsColValue
+            // 
+            this.dgWmsColValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dgWmsColValue.DataPropertyName = "value";
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dgWmsColValue.DefaultCellStyle = dataGridViewCellStyle8;
+            this.dgWmsColValue.HeaderText = "变量值";
+            this.dgWmsColValue.Name = "dgWmsColValue";
+            this.dgWmsColValue.ReadOnly = true;
+            // 
+            // dgWmsColOptime
+            // 
+            this.dgWmsColOptime.DataPropertyName = "optime";
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dgWmsColOptime.DefaultCellStyle = dataGridViewCellStyle9;
+            this.dgWmsColOptime.HeaderText = "操作时间";
+            this.dgWmsColOptime.Name = "dgWmsColOptime";
+            this.dgWmsColOptime.ReadOnly = true;
+            this.dgWmsColOptime.Width = 140;
+            // 
+            // dgAgv
+            // 
+            this.dgAgv.AllowUserToAddRows = false;
+            this.dgAgv.AllowUserToDeleteRows = false;
+            this.dgAgv.AllowUserToResizeRows = false;
+            this.dgAgv.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.dgAgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgAgv.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgAgvColName,
+            this.dgAgvColValue,
+            this.dgAgvColOptime});
+            this.dgAgv.Location = new System.Drawing.Point(54, 34);
+            this.dgAgv.MultiSelect = false;
+            this.dgAgv.Name = "dgAgv";
+            this.dgAgv.ReadOnly = true;
+            this.dgAgv.RowHeadersVisible = false;
+            this.dgAgv.Size = new System.Drawing.Size(244, 195);
+            this.dgAgv.TabIndex = 0;
+            // 
+            // dgAgvColName
+            // 
+            this.dgAgvColName.DataPropertyName = "name";
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("宋体", 9F);
+            this.dgAgvColName.DefaultCellStyle = dataGridViewCellStyle10;
+            this.dgAgvColName.HeaderText = "变量名";
+            this.dgAgvColName.Name = "dgAgvColName";
+            this.dgAgvColName.ReadOnly = true;
+            this.dgAgvColName.Width = 120;
+            // 
+            // dgAgvColValue
+            // 
+            this.dgAgvColValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dgAgvColValue.DataPropertyName = "value";
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dgAgvColValue.DefaultCellStyle = dataGridViewCellStyle11;
+            this.dgAgvColValue.HeaderText = "变量值";
+            this.dgAgvColValue.Name = "dgAgvColValue";
+            this.dgAgvColValue.ReadOnly = true;
+            // 
+            // dgAgvColOptime
+            // 
+            this.dgAgvColOptime.DataPropertyName = "optime";
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dgAgvColOptime.DefaultCellStyle = dataGridViewCellStyle12;
+            this.dgAgvColOptime.HeaderText = "操作时间";
+            this.dgAgvColOptime.Name = "dgAgvColOptime";
+            this.dgAgvColOptime.ReadOnly = true;
+            this.dgAgvColOptime.Width = 140;
+            // 
+            // panelButton
+            // 
+            this.panelButton.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelButton.Controls.Add(this.btnStart);
+            this.panelButton.Controls.Add(this.btnStop);
+            this.panelButton.Location = new System.Drawing.Point(53, 57);
+            this.panelButton.Name = "panelButton";
+            this.panelButton.Size = new System.Drawing.Size(488, 84);
+            this.panelButton.TabIndex = 8;
+            // 
+            // panelAGV
+            // 
+            this.panelAGV.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelAGV.Controls.Add(this.lbAGVTitle);
+            this.panelAGV.Controls.Add(this.dgAgv);
+            this.panelAGV.Location = new System.Drawing.Point(1024, 85);
+            this.panelAGV.Name = "panelAGV";
+            this.panelAGV.Size = new System.Drawing.Size(344, 246);
+            this.panelAGV.TabIndex = 9;
+            // 
+            // lbAGVTitle
+            // 
+            this.lbAGVTitle.AutoSize = true;
+            this.lbAGVTitle.Font = new System.Drawing.Font("宋体", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbAGVTitle.Location = new System.Drawing.Point(0, 0);
+            this.lbAGVTitle.Name = "lbAGVTitle";
+            this.lbAGVTitle.Padding = new System.Windows.Forms.Padding(6);
+            this.lbAGVTitle.Size = new System.Drawing.Size(94, 31);
+            this.lbAGVTitle.TabIndex = 1;
+            this.lbAGVTitle.Text = "AGV变量";
+            // 
+            // panelCNC
+            // 
+            this.panelCNC.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelCNC.Controls.Add(this.lbCNCTitle);
+            this.panelCNC.Controls.Add(this.dgCnc);
+            this.panelCNC.Location = new System.Drawing.Point(608, 101);
+            this.panelCNC.Name = "panelCNC";
+            this.panelCNC.Size = new System.Drawing.Size(392, 230);
+            this.panelCNC.TabIndex = 10;
+            // 
+            // lbCNCTitle
+            // 
+            this.lbCNCTitle.AutoSize = true;
+            this.lbCNCTitle.Font = new System.Drawing.Font("宋体", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbCNCTitle.Location = new System.Drawing.Point(0, 0);
+            this.lbCNCTitle.Name = "lbCNCTitle";
+            this.lbCNCTitle.Padding = new System.Windows.Forms.Padding(6);
+            this.lbCNCTitle.Size = new System.Drawing.Size(94, 31);
+            this.lbCNCTitle.TabIndex = 2;
+            this.lbCNCTitle.Text = "CNC变量";
+            // 
+            // panelBELT
+            // 
+            this.panelBELT.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelBELT.Controls.Add(this.lbBELTTitle);
+            this.panelBELT.Controls.Add(this.dgBelt);
+            this.panelBELT.Location = new System.Drawing.Point(608, 358);
+            this.panelBELT.Name = "panelBELT";
+            this.panelBELT.Size = new System.Drawing.Size(392, 248);
+            this.panelBELT.TabIndex = 11;
+            // 
+            // lbBELTTitle
+            // 
+            this.lbBELTTitle.AutoSize = true;
+            this.lbBELTTitle.Font = new System.Drawing.Font("宋体", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbBELTTitle.Location = new System.Drawing.Point(0, 0);
+            this.lbBELTTitle.Name = "lbBELTTitle";
+            this.lbBELTTitle.Padding = new System.Windows.Forms.Padding(6);
+            this.lbBELTTitle.Size = new System.Drawing.Size(105, 31);
+            this.lbBELTTitle.TabIndex = 7;
+            this.lbBELTTitle.Text = "BELT变量";
+            // 
+            // panelWMS
+            // 
+            this.panelWMS.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelWMS.Controls.Add(this.lbWMSTitle);
+            this.panelWMS.Controls.Add(this.dgWms);
+            this.panelWMS.Location = new System.Drawing.Point(1081, 358);
+            this.panelWMS.Name = "panelWMS";
+            this.panelWMS.Size = new System.Drawing.Size(499, 248);
+            this.panelWMS.TabIndex = 12;
+            // 
+            // lbWMSTitle
+            // 
+            this.lbWMSTitle.AutoSize = true;
+            this.lbWMSTitle.Font = new System.Drawing.Font("宋体", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbWMSTitle.Location = new System.Drawing.Point(0, 0);
+            this.lbWMSTitle.Name = "lbWMSTitle";
+            this.lbWMSTitle.Padding = new System.Windows.Forms.Padding(6);
+            this.lbWMSTitle.Size = new System.Drawing.Size(94, 31);
+            this.lbWMSTitle.TabIndex = 8;
+            this.lbWMSTitle.Text = "WMS变量";
+            // 
+            // tbLog
+            // 
+            this.tbLog.BackColor = System.Drawing.SystemColors.Control;
+            this.tbLog.Location = new System.Drawing.Point(53, 189);
+            this.tbLog.Multiline = true;
+            this.tbLog.Name = "tbLog";
+            this.tbLog.Size = new System.Drawing.Size(144, 142);
+            this.tbLog.TabIndex = 13;
+            // 
+            // FormMain
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(1695, 767);
+            this.Controls.Add(this.tbLog);
+            this.Controls.Add(this.panelWMS);
+            this.Controls.Add(this.panelBELT);
+            this.Controls.Add(this.panelCNC);
+            this.Controls.Add(this.panelAGV);
+            this.Controls.Add(this.panelButton);
+            this.Font = new System.Drawing.Font("宋体", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.Name = "FormMain";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "TAIAMes服务控制";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMain_FormClosed);
+            this.Load += new System.EventHandler(this.FormMain_Load);
+            this.SizeChanged += new System.EventHandler(this.FormMain_SizeChanged);
+            ((System.ComponentModel.ISupportInitialize)(this.dgBelt)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgCnc)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgWms)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgAgv)).EndInit();
+            this.panelButton.ResumeLayout(false);
+            this.panelAGV.ResumeLayout(false);
+            this.panelAGV.PerformLayout();
+            this.panelCNC.ResumeLayout(false);
+            this.panelCNC.PerformLayout();
+            this.panelBELT.ResumeLayout(false);
+            this.panelBELT.PerformLayout();
+            this.panelWMS.ResumeLayout(false);
+            this.panelWMS.PerformLayout();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private Sunisoft.IrisSkin.SkinEngine skinEngine1;
+        public System.Windows.Forms.Button btnStart;
+        public System.Windows.Forms.Button btnStop;
+        public System.Windows.Forms.DataGridView dgAgv;
+        public System.Windows.Forms.DataGridView dgWms;
+        public System.Windows.Forms.DataGridView dgBelt;
+        public System.Windows.Forms.DataGridView dgCnc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgBeltColName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgBeltColValue;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgBeltColOptime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgCncColName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgCncColValue;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgCncColOptime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgWmsColName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgWmsColValue;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgWmsColOptime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgAgvColName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgAgvColValue;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgAgvColOptime;
+        private System.Windows.Forms.Panel panelButton;
+        private System.Windows.Forms.Panel panelAGV;
+        private System.Windows.Forms.Label lbAGVTitle;
+        private System.Windows.Forms.Panel panelCNC;
+        private System.Windows.Forms.Label lbCNCTitle;
+        private System.Windows.Forms.Panel panelBELT;
+        private System.Windows.Forms.Label lbBELTTitle;
+        private System.Windows.Forms.Panel panelWMS;
+        private System.Windows.Forms.Label lbWMSTitle;
+        private System.Windows.Forms.TextBox tbLog;
+    }
+}
+

@@ -1,0 +1,506 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using Opc.Ua;
+using Opc.Ua.Client;
+using OpcUaHelper;
+using System.Data;
+using System.Data.SqlClient;
+using CommonClass;
+
+namespace TAIAMESControlServer
+{
+
+
+    class CncTaskB
+    {
+        static log4net.ILog log = log4net.LogManager.GetLogger("CncTaskB");
+        static FormMain formmain = (FormMain)MyApplicationContext.CurrentContext.MainForm;
+
+        //线程控制变量
+        public static bool bStop = false;                                                           //线程停止信号
+        public static bool bRunningFlag = false;                                                    //线程运行标志
+
+        static int iStage = 0;                                                                      //状态机
+
+        //OPC节点
+        const string opcCanExChangeData = "ns=2;IMMES.Line.CNC.InteractR_CanExChangeData";          //PLC-MES，RFID可以读取
+        const string opcExchangeFinish = "ns=2;IMMES.Line.CNC.InteractW_ExchangeFinish";            //MES-PLC，RFID读取完成
+        const string opcMaterialSN = "ns=2;IMMES.Line.CNC.InteractW_OrderIDBytes";                  //MES-PLC，将原料SN写入CNC
+        const string opcCanIncomeB1 = "ns=2;IMMES.Line.CNC.InteractR_CanIncome";                    //PLC-MES，B1点AGV可安全进入：true：允许进入
+        const string opcCarArrivaledB1 = "ns=2;IMMES.Line.CNC.InteractW_CarArrivaled";              //MES-PLC，当AGV到达时设置true通知PLC
+        const string opcCanIncomeB2 = "ns=2;IMMES.Line.CNC.InteractR_CanIncomeB2";                  //PLC-MES，B2点AGV可安全进入：true：允许进入
+        const string opcCanIncomeC = "ns=2;IMMES.Line.MES.InteractR_CanIncome";                     //PLC-MES，C点是否运行进入：true：允许进入
+        const string opcFinishB1 = "ns=2;IMMES.Line.CNC.InteractW_Finish";                          //MES-PLC，AGV离开后设置true通知PLC
+
+        static void thTaskBFunc()
+        {
+            string strmsg = "";
+            int iTimeWait = 0;
+
+            bool bCanExChangeData = false;
+            bool bCanIncomeB1 = false;
+            bool bCanIncomeB2 = false;
+            bool bCanIncomeC = false;
+
+            string robotcode = "";                                                                  //AGV车号
+            string materialsn = "";                                                                 //原料SN
+            string productsn = "";                                                                  //产品SN
+
+            OpcUaClient ua = new OpcUaClient();
+            DataValue dv;
+
+            strmsg = "CncTaskB线程启动";
+            formmain.logToView(strmsg);
+            log.Info(strmsg);
+
+            //初始化数据
+            iTimeWait = 0;
+            while (true)
+            {
+                if (bStop)                                                                          //结束线程
+                    break;
+
+                //延时等待
+                if (iTimeWait > 0)
+                {
+                    iTimeWait--;
+                    Thread.Sleep(1000);
+                    continue;
+                }
+
+                using (SqlConnection conn = new SqlConnection(Properties.Settings.Default.ConnString))
+                {
+                    try
+                    {
+                        conn.Open();
+
+                        SQLHelper.ExecuteNonQuery(conn, null, CommandType.StoredProcedure, "cnc_comm_init", null);
+                        {
+                            DataSet ds = SQLHelper.QueryDataSet(conn, null, CommandType.StoredProcedure, "cnc_sn_get", new SqlParameter("posnumber", "B1"));
+                            VarComm.SetVar(conn, "CNC", "SNInB1", ds.Tables[0].Rows[0]["serialnumber"].ToString());
+                        }
+                        {
+                            DataSet ds = SQLHelper.QueryDataSet(conn, null, CommandType.StoredProcedure, "cnc_sn_get", new SqlParameter("posnumber", "B2"));
+                            VarComm.SetVar(conn, "CNC", "SNInB2", ds.Tables[0].Rows[0]["serialnumber"].ToString());
+                        }
+
+                        strmsg = "CncTaskB初始化";
+                        formmain.logToView(strmsg);
+                        log.Info(strmsg);
+
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        strmsg = "Error: " + ex.Message + " 等待一会儿再试!";
+                        formmain.logToView(strmsg);
+                        log.Info(strmsg);
+                        iTimeWait = 10;
+                        continue;
+                    }
+                }
+            }
+
+            bRunningFlag = true;                                                                    //设置任务B线程运行标志
+            while (true)
+            {
+                if (bStop && !WmsTaskA.bRunningFlag && iStage == 0)                                 //结束线程
+                    break;
+
+                //延时等待
+                if (iTimeWait > 0)
+                {
+                    iTimeWait--;
+                    Thread.Sleep(1000);
+                    continue;
+                }
+
+                using (SqlConnection conn = new SqlConnection(Properties.Settings.Default.ConnString))
+                {
+                    try
+                    {
+                        conn.Open();
+
+                        var t = ua.ConnectServer(Properties.Settings.Default.OpcUrl);               //连接OPCUA服务
+                        Task.WaitAll(t);
+
+                        while (true)
+                        {
+                            if (bStop && !WmsTaskA.bRunningFlag && iStage == 0)                     //结束线程
+                                break;
+
+                            //延时等待
+                            if (iTimeWait > 0)
+                            {
+                                iTimeWait--;
+                                Thread.Sleep(1000);
+                                continue;
+                            }
+
+                            //读取OPC数据点
+                            dv = ua.ReadNode(new NodeId(opcCanExChangeData));
+                            bCanExChangeData = (dv.Value.ToString() == "True");
+
+                            dv = ua.ReadNode(new NodeId(opcCanIncomeB1));
+                            bCanIncomeB1 = (dv.Value.ToString() == "True");
+                            dv = ua.ReadNode(new NodeId(opcCanIncomeB2));
+                            bCanIncomeB2 = (dv.Value.ToString() == "True");
+                            dv = ua.ReadNode(new NodeId(opcCanIncomeC));
+                            bCanIncomeC = (dv.Value.ToString() == "True");
+
+                            //状态机：
+                            //0：等待AGV到达
+                            //1：按车号读取原料序号
+                            //2：B1点进入追踪
+                            //3：设置AGV到达信号
+                            //4：将AGV上的原料SN放入B1工位
+                            //5：发送操作完成信号
+                            //6：检测放行信号点，将B2工位产品序号放入AGV，并放行
+                            //7：等待AGV发车
+                            //8：B2点离开追踪
+                            //9：等待托盘到达B2工位
+                            //10：同步数据
+
+                            #region 等待AGV到达（0）
+                            if (iStage == 0)
+                            {
+                                //检测AGV到达B1点
+                                bool bArrivedB1 = false;
+                                if (VarComm.GetVar(conn, "AGV", "ArrivedB1") != "")
+                                    bArrivedB1 = true;
+
+                                if (bArrivedB1)
+                                {
+                                    //获取AGV车号
+                                    robotcode = VarComm.GetVar(conn, "AGV", "RobotCodeB1");
+                                    VarComm.SetVar(conn, "CNC", "RobotCode", robotcode);
+
+                                    strmsg = "AGV已到达B1点";
+                                    formmain.logToView(strmsg);
+                                    log.Info(strmsg);
+
+                                    iStage = 1;
+                                }
+                            }
+                            #endregion
+
+                            #region 按车号读取原料序号（1）
+                            if (iStage == 1)
+                            {
+                                materialsn = "";
+                                {
+                                    DataSet ds = SQLHelper.QueryDataSet(conn, null, CommandType.StoredProcedure, "agv_sn_get",
+                                        new SqlParameter("agvnumber", robotcode));
+                                    materialsn = ds.Tables[0].Rows[0]["serialnumber"].ToString();
+                                }
+                                VarComm.SetVar(conn, "CNC", "MaterialSN", materialsn);
+
+                                strmsg = "产品序号读取成功，车号：" + robotcode + "，原料序号：" + materialsn;
+                                formmain.logToView(strmsg);
+                                log.Info(strmsg);
+
+                                iStage = 2;
+                            }
+                            #endregion
+
+                            #region B1点进入追踪（2）
+                            if(iStage == 2)
+                            {
+                                if (materialsn != "")
+                                {
+                                    Tracking.Insert(conn, "CNC", "B1点进入", materialsn);               //写入Tracking信息
+
+                                    iStage = 3;
+                                }
+                                else
+                                {
+                                    iStage = 3;
+                                }
+                            }
+                            #endregion
+
+                            #region 设置AGV到达信号（3）
+                            if (iStage == 3)
+                            {
+                                ua.WriteNode(opcCarArrivaledB1, true);
+
+                                strmsg = "B1点操作开始，等待数据交换...";
+                                formmain.logToView(strmsg);
+                                log.Info(strmsg);
+
+                                iStage = 4;
+                            }
+                            #endregion
+
+                            #region 将AGV上的原料序号放入B1工位（4）
+                            if (iStage == 4)
+                            {
+                                if (bCanExChangeData)
+                                {
+                                    //写入原料序号
+                                    byte[] bytearray = new byte[18];
+                                    for (int i = 0; i < bytearray.Length; i++)
+                                        bytearray[i] = 0;
+                                    byte[] arr = Encoding.Default.GetBytes(materialsn);
+                                    for (int i = 0; i < arr.Length; i++)
+                                    {
+                                        if (i < bytearray.Length)
+                                        {
+                                            bytearray[i] = arr[i];
+                                        }
+                                    }
+                                    ua.WriteNode(opcMaterialSN, bytearray);
+                                    SQLHelper.ExecuteNonQuery(conn, null, CommandType.StoredProcedure, "cnc_sn_set",
+                                                new SqlParameter("posnumber", "B1"), new SqlParameter("serialnumber", materialsn));
+                                    VarComm.SetVar(conn, "CNC", "SNInB1", materialsn);
+                                    ua.WriteNode(opcExchangeFinish, true);                          //数据交换完成
+
+                                    strmsg = "原料序号写入CNC完成";
+                                    formmain.logToView(strmsg);
+                                    log.Info(strmsg);
+
+                                    iStage = 5;
+                                }
+                            }
+                            #endregion
+
+                            #region 发送操作完成信号（5）
+                            if (iStage == 5)
+                            {
+                                ua.WriteNode(opcFinishB1, true);                                    //操作完成
+
+                                strmsg = "B1点操作完成信号已发送，等待B2点和C点放行...";
+                                formmain.logToView(strmsg);
+                                log.Info(strmsg);
+
+                                iStage = 6;
+                            }
+                            #endregion
+
+                            #region 检测放行信号点，将B2工位产品序号放入AGV，并放行(6)
+                            if (iStage == 6)
+                            {
+                                if (bCanIncomeB2 && bCanIncomeC)
+                                {
+                                    productsn = VarComm.GetVar(conn, "CNC", "SNInB2");
+                                    VarComm.SetVar(conn, "CNC", "ProductSN", productsn);
+                                    SQLHelper.ExecuteNonQuery(conn, null, CommandType.StoredProcedure, "agv_sn_set",
+                                        new SqlParameter("agvnumber", robotcode), new SqlParameter("serialnumber", productsn));
+                                    VarComm.SetVar(conn, "CNC", "SNInB2", "");
+                                    VarComm.SetVar(conn, "AGV", "ContinueB1", "1");
+
+                                    strmsg = "AGV离开B1点，车号：" + robotcode + "，产品序号：" + productsn;
+                                    formmain.logToView(strmsg);
+                                    log.Info(strmsg);
+
+                                    iStage = 7;
+                                }
+                            }
+                            #endregion
+
+                            #region 等待AGV发车（7）
+                            if (iStage == 7)
+                            {
+                                bool bArrivedB1 = false;
+                                if (VarComm.GetVar(conn, "AGV", "ArrivedB1") != "")
+                                    bArrivedB1 = true;
+
+
+                                if (!bArrivedB1)
+                                {
+                                    strmsg = "AGV已发车";
+                                    formmain.logToView(strmsg);
+                                    log.Info(strmsg);
+
+                                    iStage = 8;
+                                }
+
+                            }
+                            #endregion
+
+                            #region B2点离开追踪（8）
+                            if (iStage == 8)
+                            {
+                                if (productsn != "")
+                                {
+                                    Tracking.Insert(conn, "CNC", "B1点离开", productsn);                //写入Tracking信息
+
+                                    iStage = 9;
+                                }
+                                else
+                                {
+                                    iStage = 9;
+                                }
+                            }
+                            #endregion
+
+                            #region 等待托盘到达B2工位（9）
+                            if (iStage == 9)
+                            {
+                                if (bCanIncomeB2)
+                                {
+
+                                    strmsg = "B1点操作完成";
+                                    formmain.logToView(strmsg);
+                                    log.Info(strmsg);
+
+                                    iStage = 10;
+                                }
+                            }
+                            #endregion
+
+                            #region 同步数据（10）
+                            if (iStage == 10)
+                            {
+                                //将B1点的SN存入B2点
+                                string sn = VarComm.GetVar(conn, "CNC", "SNInB1");
+                                SQLHelper.ExecuteNonQuery(conn, null, CommandType.StoredProcedure, "cnc_sn_set",
+                                    new SqlParameter("posnumber", "B2"), new SqlParameter("serialnumber", sn));
+                                VarComm.SetVar(conn, "CNC", "SNInB2", sn);
+
+                                //将B1点清空
+                                SQLHelper.ExecuteNonQuery(conn, null, CommandType.StoredProcedure, "cnc_sn_set",
+                                    new SqlParameter("posnumber", "B1"), new SqlParameter("serialnumber", ""));
+                                VarComm.SetVar(conn, "CNC", "SNInB1", "");
+
+                                strmsg = "数据同步完成，B1-->B2：" + sn;
+                                formmain.logToView(strmsg);
+                                log.Info(strmsg);
+
+                                iStage = 0;
+                            }
+                            #endregion
+
+                            Thread.Sleep(200);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        strmsg = "Error: " + ex.Message + " 等待一会儿再试!";
+                        formmain.logToView(strmsg);
+                        log.Info(strmsg);
+                        iTimeWait = 10;
+                        continue;
+                    }
+                }
+            }
+
+            strmsg = "CncTaskB线程停止";
+            formmain.logToView(strmsg);
+            log.Info(strmsg);
+            bRunningFlag = false;                                                                   //设置任务B线程停止标志
+            return;
+        }
+
+        public static void Start()
+        {
+            //启动任务B控制
+            Task.Run(() => thTaskBFunc());
+        }
+
+        public static void Stop()
+        {
+            //停止任务A控制
+            bStop = true;
+        }
+    }
+
+    //CncTaskB变量显示
+    class CncTaskBVarRefresh
+    {
+        static log4net.ILog log = log4net.LogManager.GetLogger("CncTaskBVarRefresh");
+        static FormMain formmain = (FormMain)MyApplicationContext.CurrentContext.MainForm;
+
+        public static bool bStop = false;                                                           //线程停止信号
+        public static bool bRunningFlag = false;                                                    //线程运行标志
+
+        public static void thTaskBVarRefreshFunc()
+        {
+            log.Info("CncTaskB变量显示线程启动");
+            bRunningFlag = true;
+
+            int iTimeWait = 0;
+            string strmsg = "";
+            DateTime oldts = new DateTime(1970, 1, 1);                                              //数据库最后一次刷新时戳
+
+            while (true)
+            {
+                if (bStop && !CncTaskB.bRunningFlag)
+                    break;
+
+                //延时等待
+                if (iTimeWait > 0)
+                {
+                    iTimeWait--;
+                    Thread.Sleep(1000);
+                    continue;
+                }
+                using (SqlConnection conn = new SqlConnection(Properties.Settings.Default.ConnString))
+                {
+                    try
+                    {
+                        conn.Open();
+
+                        while (true)
+                        {
+                            if (bStop && !CncTaskB.bRunningFlag)
+                                break;
+
+                            //延时等待
+                            if (iTimeWait > 0)
+                            {
+                                iTimeWait--;
+                                Thread.Sleep(1000);
+                                continue;
+                            }
+
+                            //查询变量最新操作时戳
+                            DateTime ts = VarComm.GetLastTime(conn, "CNC");
+                            if (ts > oldts)
+                            {
+                                //读取变量列表
+                                DataSet ds = SQLHelper.QueryDataSet(conn, null, CommandType.StoredProcedure, "bas_comm_getallvar",
+                                    new SqlParameter("sectionname", "CNC"));
+
+                                //刷新显示
+                                formmain.Invoke(new EventHandler(delegate
+                                {
+                                    formmain.dgCnc.DataSource = ds.Tables[0];
+                                }));
+                                oldts = ts;
+                            }
+                            Thread.Sleep(200);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        strmsg = "Error: " + ex.Message + " 等待一会儿再试!";
+                        formmain.logToView(strmsg);
+                        log.Error(strmsg);
+                        iTimeWait = 10;
+                        continue;
+                    }
+                }
+            }
+            bRunningFlag = false;
+            log.Info("CncTaskB变量显示线程结束");
+        }
+
+        public static void Start()
+        {
+            //启动CncTaskB变量显示线程
+            Task.Run(() => thTaskBVarRefreshFunc());
+
+        }
+
+        public static void Stop()
+        {
+            //停止CncTaskB变量显示线程
+            bStop = true;
+        }
+    }
+}
